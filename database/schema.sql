@@ -54,7 +54,7 @@ CREATE INDEX idx_users_email               ON users(email);
 
 INSERT INTO users (name, email, password, role) VALUES
 (
-    'Dr. Priya Sharma',
+    'Dr. Tamaghna Ghosh',
     'faculty@college.edu',
     '$2a$10$/hn3jxY1lJZYxyt7Vn91h.c9CekBLxsrwbIK3PyDyU0mzRYikz6te',
     'faculty'
