@@ -213,19 +213,26 @@ const LoginPage = () => {
               )}
 
               {mode === 'register' && (
-                <div>
-                  <label htmlFor="reg-name" className="form-label">Full Name</label>
-                  <input
-                    id="reg-name"
-                    type="text"
-                    name="name"
-                    placeholder="Alice Johnson"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="form-input"
-                    autoComplete="name"
-                  />
-                </div>
+                <>
+                  <div className="mb-3 text-center">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-100">
+                      🎓 Student Registration Only
+                    </span>
+                  </div>
+                  <div>
+                    <label htmlFor="reg-name" className="form-label">Full Name</label>
+                    <input
+                      id="reg-name"
+                      type="text"
+                      name="name"
+                      placeholder="Alice Johnson"
+                      value={form.name}
+                      onChange={handleChange}
+                      className="form-input"
+                      autoComplete="name"
+                    />
+                  </div>
+                </>
               )}
 
               <div>
