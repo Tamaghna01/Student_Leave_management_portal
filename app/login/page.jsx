@@ -102,7 +102,7 @@ const LoginPage = () => {
     setMode(newMode);
     setError('');
     setSuccess('');
-    setForm({ name: '', email: '', password: '', role: form.role });
+    setForm({ name: '', email: '', password: '', role: newMode === 'register' ? 'student' : form.role });
   };
 
   return (
@@ -180,7 +180,7 @@ const LoginPage = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              {mode !== 'forgot' && (
+              {mode === 'login' && (
                 <div>
                   <label className="form-label">I am a</label>
                   <div className="flex gap-2 bg-slate-100 p-1 rounded-lg">

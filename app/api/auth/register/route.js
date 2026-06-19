@@ -24,12 +24,12 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    // Validate role
-    if (role !== 'student' && role !== 'faculty') {
+    // Validate role (Public registration is for students only)
+    if (role !== 'student') {
       return NextResponse.json({
         success: false,
-        message: 'Role must be either student or faculty.',
-      }, { status: 400 });
+        message: 'Faculty accounts cannot be created via public registration. Please contact the administrator.',
+      }, { status: 403 });
     }
 
     // Validate email format
@@ -48,50 +48,24 @@ export async function POST(req) {
 
     // Find if user already exists
     const existingUser = await UserModel.findByEmail(email);
-
-    if (role === 'faculty') {
-      if (!existingUser) {
-        return NextResponse.json({
-          success: false,
-          message: 'This email address is not pre-authorized for a Faculty account. Please contact the administrator.',
-        }, { status: 403 });
-      }
-      if (existingUser.role !== 'faculty') {
-        return NextResponse.json({
-          success: false,
-          message: 'An account with this email already exists.',
-        }, { status: 409 });
-      }
-    } else {
-      // For student registration, the email must not exist at all
-      if (existingUser) {
-        return NextResponse.json({
-          success: false,
-          message: 'An account with this email already exists.',
-        }, { status: 409 });
-      }
+    if (existingUser) {
+      return NextResponse.json({
+        success: false,
+        message: 'An account with this email already exists.',
+      }, { status: 409 });
     }
 
     // Hash the password
     const salt         = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    let userResult;
-    if (role === 'faculty') {
-      // Faculty registers by updating their pre-seeded credentials (password and name)
-      userResult = await UserModel.update(existingUser.id, {
-        name,
-        password: hashedPassword
-      });
-    } else {
-      // Student registers by creating a new account
-      userResult = await UserModel.create({
-        name,
-        email,
-        password: hashedPassword,
-        role,
-      });
-    }
+    // Student registers by creating a new account
+    const userResult = await UserModel.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: 'student',
+    });
 
     const token = signToken(userResult);
 
