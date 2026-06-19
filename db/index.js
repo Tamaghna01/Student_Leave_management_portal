@@ -2,6 +2,10 @@ import { Pool } from 'pg';
 
 let pool;
 
+if (!process.env.DATABASE_URL) {
+  console.warn("⚠️ WARNING: DATABASE_URL environment variable is not defined! Database queries will fail.");
+}
+
 if (!global.pgPool) {
   global.pgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
